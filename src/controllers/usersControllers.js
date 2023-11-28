@@ -13,14 +13,19 @@ const getUsers = (req, res) => {
 };
 
 const getUsersByID = (req, res) => {
+  const id = parseInt(req.params.id);
   database
-    .query("select * from usersByID")
+    .query("select * from users where id = ?", [id])
     .then(([users]) => {
-      res.json(users); // use res.json instead of console.log
+      if (users[0] != null) {
+        res.json(users[0]);
+      } else {
+        res.sendStatus(404);
+      }
     })
     .catch((err) => {
       console.error(err);
-      res.sendStatus(404);
+      res.sendStatus(500);
     });
 };
 module.exports = {
